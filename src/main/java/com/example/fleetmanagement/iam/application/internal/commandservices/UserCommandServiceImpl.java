@@ -17,7 +17,7 @@ import java.util.Optional;
  * User command service implementation.
  * <p>
  *     This class implements the {@link UserCommandService} interface.
- *     It is used to handle the sign up and sign in commands.
+ *     It is used to handle the sign-up and sign in commands.
  * </p>
  *
  */
