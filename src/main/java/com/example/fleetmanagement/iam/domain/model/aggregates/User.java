@@ -3,6 +3,7 @@ package com.example.fleetmanagement.iam.domain.model.aggregates;
 import com.example.fleetmanagement.iam.domain.model.entities.Role;
 import com.example.fleetmanagement.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -20,9 +21,10 @@ import java.util.Set;
 @Entity
 public class User extends AuditableAbstractAggregateRoot<User> {
     @NotBlank
-    @Size(max = 50)
+    @Email
+    @Size(max = 100)
     @Column(unique = true)
-    private String username;
+    private String email;
 
     @NotBlank
     @Size(max = 120)
@@ -42,27 +44,27 @@ public class User extends AuditableAbstractAggregateRoot<User> {
     }
 
     /**
-     * Constructor with username and password.
+     * Constructor with email and password.
      *
-     * @param username the username
+     * @param email the email
      * @param password the password
      */
-    public User(String username, String password) {
+    public User(String email, String password) {
         this();
-        this.username = username;
+        this.email = email;
         this.password = password;
         this.roles = new HashSet<>();
     }
 
     /**
-     * Constructor with username, password and roles.
+     * Constructor with email, password and roles.
      *
-     * @param username the username
+     * @param email the email
      * @param password the password
      * @param roles the roles
      */
-    public User(String username, String password, List<Role> roles) {
-        this(username, password);
+    public User(String email, String password, List<Role> roles) {
+        this(email, password);
         addRoles(roles);
     }
 

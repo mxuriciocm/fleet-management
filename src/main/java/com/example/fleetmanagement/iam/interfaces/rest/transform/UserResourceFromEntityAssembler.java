@@ -19,7 +19,7 @@ public class UserResourceFromEntityAssembler {
     public static UserResource toResourceFromEntity(User entity) {
         return new UserResource(
                 entity.getId(),
-                entity.getUsername(),
+                entity.getEmail(),
                 RoleStringListFromEntityListAssembler.toResourceListFromEntitySet(entity.getRoles()));
     }
 }

@@ -2,8 +2,8 @@ package com.example.fleetmanagement.iam.application.internal.queryservices;
 
 import com.example.fleetmanagement.iam.domain.model.aggregates.User;
 import com.example.fleetmanagement.iam.domain.model.queries.GetAllUsersQuery;
+import com.example.fleetmanagement.iam.domain.model.queries.GetUserByEmailQuery;
 import com.example.fleetmanagement.iam.domain.model.queries.GetUserByIdQuery;
-import com.example.fleetmanagement.iam.domain.model.queries.GetUserByUsernameQuery;
 import com.example.fleetmanagement.iam.domain.services.UserQueryService;
 import com.example.fleetmanagement.iam.infrastructure.persistence.jpa.repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -41,7 +41,7 @@ public class UserQueryServiceImpl implements UserQueryService {
 
     // inherited javadoc
     @Override
-    public Optional<User> handle(GetUserByUsernameQuery query) {
-        return userRepository.findByUsername(query.username());
+    public Optional<User> handle(GetUserByEmailQuery query) {
+        return userRepository.findByEmail(query.email());
     }
 }

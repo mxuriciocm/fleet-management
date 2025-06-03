@@ -3,7 +3,7 @@ package com.example.fleetmanagement.iam.domain.services;
 import com.example.fleetmanagement.iam.domain.model.aggregates.User;
 import com.example.fleetmanagement.iam.domain.model.queries.GetAllUsersQuery;
 import com.example.fleetmanagement.iam.domain.model.queries.GetUserByIdQuery;
-import com.example.fleetmanagement.iam.domain.model.queries.GetUserByUsernameQuery;
+import com.example.fleetmanagement.iam.domain.model.queries.GetUserByEmailQuery;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,12 +12,12 @@ import java.util.Optional;
  * User query service.
  * <p>
  *     This service is responsible for handling user queries.
- *     It provides methods to handle queries for getting all users, getting a user by id, and getting a user by username.
+ *     It provides methods to handle queries for getting all users, getting a user by id, and getting a user by email.
  * </p>
  */
 public interface UserQueryService {
     /**
-     * Handle get all users query.
+     * Handle get all user queries.
      *
      * @param query the query
      * @return a list of users
@@ -33,10 +33,10 @@ public interface UserQueryService {
     Optional<User> handle(GetUserByIdQuery query);
 
     /**
-     * Handle get user by username query.
+     * Handle get user by email query.
      *
      * @param query the query
      * @return an optional of user if the user was found
      */
-    Optional<User> handle(GetUserByUsernameQuery query);
+    Optional<User> handle(GetUserByEmailQuery query);
 }

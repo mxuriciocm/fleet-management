@@ -17,7 +17,7 @@ import java.util.Collection;
 @EqualsAndHashCode
 public class UserDetailsImpl implements UserDetails {
 
-    private final String username;
+    private final String email;
     @JsonIgnore
     private final String password;
     private final boolean accountNonExpired;
@@ -28,12 +28,12 @@ public class UserDetailsImpl implements UserDetails {
 
     /**
      * Constructor
-     * @param username Username
+     * @param email Email
      * @param password Password
      * @param authorities Authorities
      */
-    public UserDetailsImpl(String username, String password, Collection<? extends GrantedAuthority> authorities) {
-        this.username = username;
+    public UserDetailsImpl(String email, String password, Collection<? extends GrantedAuthority> authorities) {
+        this.email = email;
         this.password = password;
         this.authorities = authorities;
         this.accountNonExpired = true;
@@ -51,9 +51,14 @@ public class UserDetailsImpl implements UserDetails {
         var authorities = user.getRoles().stream()
                 .map(role -> role.getName().name()).map(SimpleGrantedAuthority::new).toList();
         return new UserDetailsImpl(
-                user.getUsername(),
+                user.getEmail(),
                 user.getPassword(),
                 authorities
         );
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 }
