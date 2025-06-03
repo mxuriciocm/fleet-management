@@ -2,6 +2,7 @@ package com.example.fleetmanagement.profile_management.domain.model.aggregates;
 
 import com.example.fleetmanagement.iam.domain.model.valueobjects.Roles;
 import com.example.fleetmanagement.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
+import com.example.fleetmanagement.profile_management.domain.model.valueobjects.PhoneNumber;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -40,7 +41,7 @@ public class UserProfile extends AuditableAbstractAggregateRoot<UserProfile> {
     @NotBlank
     @Size(max = 20)
     @Column(nullable = false)
-    private String phone;
+    private PhoneNumber phone;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -58,7 +59,7 @@ public class UserProfile extends AuditableAbstractAggregateRoot<UserProfile> {
      * @param phone Phone number
      * @param role Role from IAM
      */
-    public UserProfile(Long userId, String fullName, String email, String phone, Roles role) {
+    public UserProfile(Long userId, String fullName, String email, PhoneNumber phone, Roles role) {
         this.userId = userId;
         this.fullName = fullName;
         this.email = email;
@@ -72,7 +73,7 @@ public class UserProfile extends AuditableAbstractAggregateRoot<UserProfile> {
      * @param phone new phone number
      * @param emergencyContact new emergency contact (only for ROLE_CARRIER)
      */
-    public void updateProfile(String fullName, String phone, String emergencyContact) {
+    public void updateProfile(String fullName, PhoneNumber phone, String emergencyContact) {
         this.fullName = fullName;
         this.phone = phone;
 
