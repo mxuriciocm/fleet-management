@@ -41,5 +41,9 @@ public class UserProfile extends AuditableAbstractAggregateRoot<UserProfile> {
     public void updateName(String firstName, String lastName) { this.name = new PersonName(firstName, lastName); }
 
     public void updatePhoneNumber(String phoneNumber) { this.phoneNumber = new PhoneNumber(phoneNumber); }
+
+    public String getPhoneNumber() {
+        return phoneNumber.getPhoneNumber();
+    }
 }
 

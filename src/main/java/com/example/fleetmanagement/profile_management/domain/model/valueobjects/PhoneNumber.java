@@ -1,9 +1,13 @@
 package com.example.fleetmanagement.profile_management.domain.model.valueobjects;
 
 public record PhoneNumber(String number) {
-    
+
     public PhoneNumber(){
         this(null);
+    }
+
+    public String getPhoneNumber() {
+        return number;
     }
 
     public PhoneNumber {

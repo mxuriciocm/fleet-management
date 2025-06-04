@@ -22,14 +22,6 @@ public interface UserProfileQueryService {
     Optional<UserProfile> handle(GetUserProfileByIdQuery query);
 
     /**
-     * Handle get user profile by email query.
-     *
-     * @param query the query containing the user email
-     * @return an optional of UserProfile if found
-     */
-    Optional<UserProfile> handle(GetUserProfileByEmailQuery query);
-
-    /**
      * Handle get all user profiles queries.
      *
      * @param query the query to get all user profiles
