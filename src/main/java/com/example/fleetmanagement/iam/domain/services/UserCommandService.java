@@ -1,6 +1,8 @@
 package com.example.fleetmanagement.iam.domain.services;
 
 import com.example.fleetmanagement.iam.domain.model.aggregates.User;
+import com.example.fleetmanagement.iam.domain.model.commands.ChangeEmailCommand;
+import com.example.fleetmanagement.iam.domain.model.commands.ChangePasswordCommand;
 import com.example.fleetmanagement.iam.domain.model.commands.SignInCommand;
 import com.example.fleetmanagement.iam.domain.model.commands.SignUpCommand;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -30,4 +32,22 @@ public interface UserCommandService {
      * @return an optional of user and token if the sign-in was successful
      */
     Optional<ImmutablePair<User, String>> handle(SignInCommand command);
+
+    /**
+     * Handle change password command.
+     *
+     * @param command the command
+     * @return an optional of user if the password change was successful
+     * @throws RuntimeException if the current password is incorrect or user not found
+     */
+    Optional<User> handle(ChangePasswordCommand command);
+
+    /**
+     * Handle change email command.
+     *
+     * @param command the command
+     * @return an optional of user if the email change was successful
+     * @throws RuntimeException if the password is incorrect, user not found, or new email already exists
+     */
+    Optional<User> handle(ChangeEmailCommand command);
 }
