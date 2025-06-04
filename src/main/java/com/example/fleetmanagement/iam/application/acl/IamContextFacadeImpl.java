@@ -7,10 +7,13 @@ import com.example.fleetmanagement.iam.domain.model.queries.GetUserByEmailQuery;
 import com.example.fleetmanagement.iam.domain.services.UserCommandService;
 import com.example.fleetmanagement.iam.domain.services.UserQueryService;
 import com.example.fleetmanagement.iam.interfaces.acl.IamContextFacade;
+import com.example.fleetmanagement.iam.interfaces.acl.dto.UserDto;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * IamContextFacadeImpl
@@ -70,5 +73,27 @@ public class IamContextFacadeImpl implements IamContextFacade {
         var user = userQueryService.handle(getUserByIdQuery);
         if (user.isEmpty()) return "";
         return user.get().getEmail();
+    }
+
+    // inherited javadoc
+    @Override
+    public Optional<UserDto> fetchUserById(Long userId) {
+        var getUserByIdQuery = new GetUserByIdQuery(userId);
+        var user = userQueryService.handle(getUserByIdQuery);
+
+        if (user.isEmpty()) {
+            return Optional.empty();
+        }
+
+        var userEntity = user.get();
+        var roles = userEntity.getRoles().stream()
+                .map(role -> role.getStringName())
+                .collect(Collectors.toList());
+
+        return Optional.of(new UserDto(
+            userEntity.getId(),
+            userEntity.getEmail(),
+            roles
+        ));
     }
 }

@@ -1,6 +1,8 @@
 package com.example.fleetmanagement.iam.interfaces.acl;
 
+import com.example.fleetmanagement.iam.interfaces.acl.dto.UserDto;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * IamContextFacade
@@ -38,4 +40,11 @@ public interface IamContextFacade {
      * @return The email of the user.
      */
     String fetchEmailByUserId(Long userId);
+
+    /**
+     * Fetches a user by their ID
+     * @param userId The user id of the user.
+     * @return An Optional containing the UserDto if found, or empty if not found.
+     */
+    Optional<UserDto> fetchUserById(Long userId);
 }
