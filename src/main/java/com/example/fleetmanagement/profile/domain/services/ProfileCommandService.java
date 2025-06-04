@@ -16,4 +16,13 @@ public interface ProfileCommandService {
      * @throws IllegalArgumentException if the email address already exists
      */
     Optional<Profile> handle(CreateProfileCommand command);
+
+    /**
+     * Handle Update UserProfile Command
+     *
+     * @param command The {@link UpdateProfileCommand} Command
+     * @return An {@link Optional< Profile >} instance if the profile was updated successfully, otherwise empty
+     * @throws IllegalArgumentException if the profile doesn't exist
+     */
+    Optional<Profile> handle(UpdateProfileCommand command);
 }
