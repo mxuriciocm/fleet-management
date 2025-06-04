@@ -6,6 +6,7 @@ import com.example.fleetmanagement.profile_management.interfaces.rest.resources.
 public class CreateUserProfileCommandFromResourceAssembler {
     public static CreateUserProfileCommand toCommandFromResource(CreateUserProfileResource resource) {
         return new CreateUserProfileCommand(
+                resource.userId(),
                 resource.firstName(),
                 resource.lastName(),
                 resource.phoneNumber()

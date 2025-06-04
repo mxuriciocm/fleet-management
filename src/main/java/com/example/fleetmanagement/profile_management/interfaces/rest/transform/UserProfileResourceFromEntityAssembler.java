@@ -5,6 +5,6 @@ import com.example.fleetmanagement.profile_management.interfaces.rest.resources.
 
 public class UserProfileResourceFromEntityAssembler {
     public static UserProfileResource toResourceFromEntity(UserProfile entity) {
-        return new UserProfileResource(entity.getId(), entity.getFullName(), entity.getPhoneNumber());
+        return new UserProfileResource(entity.getUserId(), entity.getFullName(), entity.getPhoneNumber());
     }
 }

@@ -1,8 +1,11 @@
 package com.example.fleetmanagement.profile_management.interfaces.rest.resources;
 
-public record CreateUserProfileResource(String firstName, String lastName, String phoneNumber) {
+public record CreateUserProfileResource(Long userId, String firstName, String lastName, String phoneNumber) {
 
     public CreateUserProfileResource {
+        if (userId == null) {
+            throw new IllegalArgumentException("User ID is required");
+        }
         if (firstName == null || firstName.isBlank()) {
             throw new IllegalArgumentException("First name is required");
         }

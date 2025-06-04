@@ -20,11 +20,16 @@ public class UserProfileQueryServiceImpl implements UserProfileQueryService {
 
     @Override
     public Optional<UserProfile> handle(GetUserProfileByIdQuery query){
-        return userProfileRepository.findById(query.userId());
+        System.out.println("Searching for profile with userId: " + query.userId()); // Log para debug
+        var profile = userProfileRepository.findByUserId(query.userId());
+        System.out.println("Profile found: " + (profile.isPresent() ? "yes" : "no")); // Log para debug
+        return profile;
     }
 
     @Override
     public List<UserProfile> handle(GetAllUserProfilesQuery query){
-        return userProfileRepository.findAll();
+        var profiles = userProfileRepository.findAll();
+        System.out.println("Found " + profiles.size() + " profiles"); // Log para debug
+        return profiles;
     }
 }

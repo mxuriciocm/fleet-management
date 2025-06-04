@@ -18,8 +18,10 @@ public class UserProfileCommandServiceImpl implements UserProfileCommandService 
 
     @Override
     public Optional<UserProfile> handle(CreateUserProfileCommand command) {
+        System.out.println("Creating profile for userId: " + command.userId()); // Log para debug
         var userProfile = new UserProfile(command);
-        userProfileRepository.save(userProfile);
-        return Optional.of(userProfile);
+        var savedProfile = userProfileRepository.save(userProfile);
+        System.out.println("Profile saved with ID: " + savedProfile.getId() + " for userId: " + savedProfile.getUserId()); // Log para debug
+        return Optional.of(savedProfile);
     }
 }
