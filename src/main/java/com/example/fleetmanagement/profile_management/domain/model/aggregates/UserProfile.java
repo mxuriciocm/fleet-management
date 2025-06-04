@@ -12,6 +12,9 @@ import jakarta.persistence.*;
 @Entity
 public class UserProfile extends AuditableAbstractAggregateRoot<UserProfile> {
 
+    // User reference identifier (not a foreign key)
+    private Long userId;
+
     @Embedded
     private PersonName name;
 
@@ -19,12 +22,14 @@ public class UserProfile extends AuditableAbstractAggregateRoot<UserProfile> {
     private PhoneNumber phoneNumber;
 
     /**
-     * Constructor with first name, last name, and phone number
+     * Constructor with userId, first name, last name, and phone number
+     * @param userId User ID
      * @param firstName First name
      * @param lastName Last name
      * @param phoneNumber Phone number
      */
-    public UserProfile(String firstName, String lastName, String phoneNumber){
+    public UserProfile(Long userId, String firstName, String lastName, String phoneNumber){
+        this.userId = userId;
         this.name = new PersonName(firstName, lastName);
         this.phoneNumber = new PhoneNumber(phoneNumber);
     }
@@ -32,6 +37,7 @@ public class UserProfile extends AuditableAbstractAggregateRoot<UserProfile> {
     public UserProfile() {}
 
     public UserProfile(CreateUserProfileCommand command) {
+        this.userId = command.userId();
         this.name = new PersonName(command.firstName(), command.lastName());
         this.phoneNumber = new PhoneNumber(command.phoneNumber());
     }
@@ -45,5 +51,8 @@ public class UserProfile extends AuditableAbstractAggregateRoot<UserProfile> {
     public String getPhoneNumber() {
         return phoneNumber.getPhoneNumber();
     }
-}
 
+    public Long getUserId() {
+        return userId;
+    }
+}

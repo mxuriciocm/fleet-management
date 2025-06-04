@@ -1,22 +1,16 @@
 package com.example.fleetmanagement.profile_management.domain.model.valueobjects;
 
-public record PhoneNumber(String number) {
+import jakarta.persistence.Embeddable;
 
-    public PhoneNumber(){
-        this(null);
+@Embeddable
+public record PhoneNumber(String phoneNumber) {
+
+    public PhoneNumber {
+        // Convert null or blank to empty string
+        phoneNumber = (phoneNumber == null) ? "" : phoneNumber.trim();
     }
 
     public String getPhoneNumber() {
-        return number;
-    }
-
-    public PhoneNumber {
-        if (number == null || number.isBlank()) {
-            throw new IllegalArgumentException("Phone number must not be null or blank");
-        }
-        if (!number.matches("\\+?[0-9]{10,15}")) {
-            throw new IllegalArgumentException("Phone number must be between 10 and 15 digits, optionally starting with '+'");
-        }
-
+        return phoneNumber;
     }
 }
