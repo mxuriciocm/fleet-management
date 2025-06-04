@@ -5,7 +5,7 @@ import com.example.fleetmanagement.iam.domain.model.queries.GetUserByIdQuery;
 import com.example.fleetmanagement.iam.domain.services.UserQueryService;
 import com.example.fleetmanagement.iam.interfaces.rest.resources.UserWithProfileResource;
 import com.example.fleetmanagement.iam.interfaces.rest.transform.UserWithProfileResourceFromEntityAssembler;
-import com.example.fleetmanagement.profile_management.interfaces.acl.UserProfileContextFacade;
+import com.example.fleetmanagement.profile.interfaces.acl.ProfileContextFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @Tag(name = "Users", description = "Available User Endpoints")
 public class UsersController {
     private final UserQueryService userQueryService;
-    private final UserProfileContextFacade userProfileContextFacade;
+    private final ProfileContextFacade userProfileContextFacade;
 
     /**
      * Constructor.
@@ -39,7 +39,7 @@ public class UsersController {
      * @param userQueryService The user query service.
      * @param userProfileContextFacade The user profile context facade.
      */
-    public UsersController(UserQueryService userQueryService, UserProfileContextFacade userProfileContextFacade) {
+    public UsersController(UserQueryService userQueryService, ProfileContextFacade userProfileContextFacade) {
         this.userQueryService = userQueryService;
         this.userProfileContextFacade = userProfileContextFacade;
     }

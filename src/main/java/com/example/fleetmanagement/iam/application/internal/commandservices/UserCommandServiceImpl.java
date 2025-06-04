@@ -8,7 +8,7 @@ import com.example.fleetmanagement.iam.domain.model.commands.SignUpCommand;
 import com.example.fleetmanagement.iam.domain.services.UserCommandService;
 import com.example.fleetmanagement.iam.infrastructure.persistence.jpa.repositories.RoleRepository;
 import com.example.fleetmanagement.iam.infrastructure.persistence.jpa.repositories.UserRepository;
-import com.example.fleetmanagement.profile_management.interfaces.acl.UserProfileContextFacade;
+import com.example.fleetmanagement.profile.interfaces.acl.ProfileContextFacade;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +28,7 @@ public class UserCommandServiceImpl implements UserCommandService {
     private final RoleRepository roleRepository;
     private final HashingService hashingService;
     private final TokenService tokenService;
-    private final UserProfileContextFacade userProfileContextFacade;
+    private final ProfileContextFacade userProfileContextFacade;
 
     /**
      * Constructor.
@@ -37,9 +37,9 @@ public class UserCommandServiceImpl implements UserCommandService {
      * @param roleRepository the {@link RoleRepository} role repository.
      * @param hashingService the {@link HashingService} hashing service.
      * @param tokenService the {@link TokenService} token service.
-     * @param userProfileContextFacade the {@link UserProfileContextFacade} user profile context facade.
+     * @param userProfileContextFacade the {@link ProfileContextFacade} user profile context facade.
      */
-    public UserCommandServiceImpl(UserRepository userRepository, RoleRepository roleRepository, HashingService hashingService, TokenService tokenService, UserProfileContextFacade userProfileContextFacade) {
+    public UserCommandServiceImpl(UserRepository userRepository, RoleRepository roleRepository, HashingService hashingService, TokenService tokenService, ProfileContextFacade userProfileContextFacade) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.hashingService = hashingService;
