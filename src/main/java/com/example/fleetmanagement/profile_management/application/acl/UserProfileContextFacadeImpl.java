@@ -19,9 +19,10 @@ public class UserProfileContextFacadeImpl implements UserProfileContextFacade {
         this.userProfileQueryService = userProfileQueryService;
     }
 
-    public Long createUserProfile(String firstName, String lastName, String phoneNumber) {
-        var createUserProfileCommand = new CreateUserProfileCommand(firstName, lastName, phoneNumber);
+    @Override
+    public Long createUserProfile(Long userId, String firstName, String lastName, String phoneNumber) {
+        var createUserProfileCommand = new CreateUserProfileCommand(userId, firstName, lastName, phoneNumber);
         var userProfile = userProfileCommandService.handle(createUserProfileCommand);
-        return userProfile.isEmpty() ? Long.valueOf(0L) : userProfile.get().getId();
+        return userProfile.isEmpty() ? 0L : userProfile.get().getId();
     }
 }

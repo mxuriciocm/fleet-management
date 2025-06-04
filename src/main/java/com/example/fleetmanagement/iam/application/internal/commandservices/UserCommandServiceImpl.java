@@ -8,6 +8,7 @@ import com.example.fleetmanagement.iam.domain.model.commands.SignUpCommand;
 import com.example.fleetmanagement.iam.domain.services.UserCommandService;
 import com.example.fleetmanagement.iam.infrastructure.persistence.jpa.repositories.RoleRepository;
 import com.example.fleetmanagement.iam.infrastructure.persistence.jpa.repositories.UserRepository;
+import com.example.fleetmanagement.profile_management.interfaces.acl.UserProfileContextFacade;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ public class UserCommandServiceImpl implements UserCommandService {
     private final RoleRepository roleRepository;
     private final HashingService hashingService;
     private final TokenService tokenService;
+    private final UserProfileContextFacade userProfileContextFacade;
 
     /**
      * Constructor.
@@ -35,12 +37,14 @@ public class UserCommandServiceImpl implements UserCommandService {
      * @param roleRepository the {@link RoleRepository} role repository.
      * @param hashingService the {@link HashingService} hashing service.
      * @param tokenService the {@link TokenService} token service.
+     * @param userProfileContextFacade the {@link UserProfileContextFacade} user profile context facade.
      */
-    public UserCommandServiceImpl(UserRepository userRepository, RoleRepository roleRepository, HashingService hashingService, TokenService tokenService) {
+    public UserCommandServiceImpl(UserRepository userRepository, RoleRepository roleRepository, HashingService hashingService, TokenService tokenService, UserProfileContextFacade userProfileContextFacade) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.hashingService = hashingService;
         this.tokenService = tokenService;
+        this.userProfileContextFacade = userProfileContextFacade;
     }
 
     // inherited javadoc
@@ -48,11 +52,29 @@ public class UserCommandServiceImpl implements UserCommandService {
     public Optional<User> handle(SignUpCommand command) {
         if (userRepository.existsByEmail(command.username()))
             throw new RuntimeException("Email already exists");
+
         var roles = command.roles().stream().map(role -> roleRepository.findByName(role.getName())
                 .orElseThrow(() -> new RuntimeException("Role name not found"))).toList();
+
         var user = new User(command.username(), hashingService.encode(command.password()), roles);
-        userRepository.save(user);
-        return userRepository.findByEmail(command.username());
+        var savedUser = userRepository.save(user);
+        System.out.println("User created with ID: " + savedUser.getId());
+
+        try {
+            // Create user profile automatically after user creation with null values
+            Long profileId = userProfileContextFacade.createUserProfile(
+                savedUser.getId(),
+                null,  // firstName will be handled by PersonName value object
+                null,  // lastName will be handled by PersonName value object
+                null   // phoneNumber will be handled by PhoneNumber value object
+            );
+            System.out.println("Profile created with ID: " + profileId);
+        } catch (Exception e) {
+            System.err.println("Error creating profile: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return Optional.of(savedUser);
     }
 
     // inherited javadoc
