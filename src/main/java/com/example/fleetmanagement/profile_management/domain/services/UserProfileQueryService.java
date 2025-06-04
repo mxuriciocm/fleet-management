@@ -30,7 +30,7 @@ public interface UserProfileQueryService {
     Optional<UserProfile> handle(GetUserProfileByEmailQuery query);
 
     /**
-     * Handle get all user profiles query.
+     * Handle get all user profiles queries.
      *
      * @param query the query to get all user profiles
      * @return a list of UserProfile
