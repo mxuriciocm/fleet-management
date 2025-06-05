@@ -14,12 +14,6 @@ public class ProfileWithUserResourceAssembler {
         String email = userDto.map(UserDto::email).orElse("");
         List<String> roles = userDto.map(UserDto::roles).orElse(Collections.emptyList());
 
-        return new ProfileWithUserResource(
-            profile.getId(),
-            profile.getFullName(),
-            profile.getPhoneNumber(),
-            email,
-            roles
-        );
+        return new ProfileWithUserResource(profile.getId(), profile.getFullName(), profile.getPhoneNumber(), email, roles);
     }
 }

@@ -21,32 +21,51 @@ public class VehicleQueryServiceImpl implements VehicleQueryService {
         this.vehicleRepository = vehicleRepository;
     }
 
+    /**
+     * Retrieve a vehicle by its ID.
+     * @param query the query containing the vehicle ID
+     * @return an Optional containing the vehicle if found, or empty if not found
+     */
     @Override
     public Optional<Vehicle> handle(GetVehicleByIdQuery query) {
-        System.out.println("Searching for vehicle with ID: " + query.vehicleId()); // Log
         return vehicleRepository.findById(query.vehicleId());
     }
 
+    /**
+     * Retrieve all vehicles managed by a specific manager.
+     * @param query the query containing the manager ID
+     * @return a list of vehicles managed by the specified manager
+     */
     @Override
     public List<Vehicle> handle(GetVehiclesByManagerIdQuery query) {
-        System.out.println("Searching for vehicles with manager ID: " + query.managerId()); // Log
-        List<Vehicle> vehicles = vehicleRepository.findByManagerId(query.managerId());
-        System.out.println("Found " + vehicles.size() + " vehicles for manager"); // Log
-        return vehicles;
+        return vehicleRepository.findByManagerId(query.managerId());
     }
 
+    /**
+     * Retrieve a vehicle by its carrier ID.
+     * @param query the query containing the carrier ID
+     * @return an Optional containing the vehicle if found, or empty if not found
+     */
     @Override
     public Optional<Vehicle> handle(GetVehicleByCarrierIdQuery query) {
-        System.out.println("Searching for vehicle assigned to carrier ID: " + query.carrierId()); // Log
         return vehicleRepository.findByCarrierId(query.carrierId());
     }
 
+    /**
+     * Retrieve a vehicle by its license plate.
+     * @param query the query containing the license plate
+     * @return an Optional containing the vehicle if found, or empty if not found
+     */
     @Override
     public Optional<Vehicle> handle(GetVehicleByLicensePlateQuery query) {
-        System.out.println("Searching for vehicle with license plate: " + query.licensePlate()); // Log
         return vehicleRepository.findByLicensePlate(query.licensePlate());
     }
 
+    /**
+     * Count the number of vehicles managed by a specific manager.
+     * @param managerId the ID of the manager
+     * @return the count of vehicles managed by the specified manager
+     */
     @Override
     public int countVehiclesByManagerId(Long managerId) {
         return vehicleRepository.countByManagerId(managerId);

@@ -27,27 +27,16 @@ public class ProfileCommandServiceImpl implements ProfileCommandService {
     @Override
     public Optional<Profile> handle(UpdateProfileCommand command) {
         Optional<Profile> existingProfile = userProfileRepository.findByUserId(command.userId());
-        if (existingProfile.isEmpty()) {
-            System.out.println("Profile not found for userId: " + command.userId());
-            return Optional.empty();
-        }
-
+        if (existingProfile.isEmpty()) { return Optional.empty(); }
         Profile profile = existingProfile.get();
-        // Actualizar los campos solo si se proporcionan valores no nulos
         if (command.firstName() != null || command.lastName() != null) {
             String firstName = command.firstName() != null ? command.firstName() : profile.getFullName().split(" ")[0];
             String lastName = command.lastName() != null ? command.lastName() :
                               (profile.getFullName().split(" ").length > 1 ? profile.getFullName().split(" ")[1] : "");
             profile.updateName(firstName, lastName);
         }
-
-        if (command.phoneNumber() != null) {
-            profile.updatePhoneNumber(command.phoneNumber());
-        }
-        // Guardar los cambios
-        System.out.println("Updating profile for userId: " + command.userId());
+        if (command.phoneNumber() != null) { profile.updatePhoneNumber(command.phoneNumber()); }
         var updatedProfile = userProfileRepository.save(profile);
-        System.out.println("Profile updated with ID: " + updatedProfile.getId() + " for userId: " + updatedProfile.getUserId());
         return Optional.of(updatedProfile);
     }
 }
