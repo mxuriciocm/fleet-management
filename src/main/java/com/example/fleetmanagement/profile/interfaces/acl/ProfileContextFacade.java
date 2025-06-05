@@ -7,7 +7,7 @@ import java.util.Optional;
  * UserProfileContextFacade
  */
 public interface ProfileContextFacade {
-    Long createUserProfile(Long userId, String firstName, String lastName, String phoneNumber);
+    Long createProfile(Long userId, String firstName, String lastName, String phoneNumber);
 
     Optional<ProfileDto> fetchProfileByUserId(Long userId);
 }

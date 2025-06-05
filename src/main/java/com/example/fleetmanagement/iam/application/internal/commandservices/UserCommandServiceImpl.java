@@ -30,7 +30,7 @@ public class UserCommandServiceImpl implements UserCommandService {
     private final RoleRepository roleRepository;
     private final HashingService hashingService;
     private final TokenService tokenService;
-    private final ProfileContextFacade userProfileContextFacade;
+    private final ProfileContextFacade profileContextFacade;
 
     /**
      * Constructor.
@@ -39,47 +39,39 @@ public class UserCommandServiceImpl implements UserCommandService {
      * @param roleRepository the {@link RoleRepository} role repository.
      * @param hashingService the {@link HashingService} hashing service.
      * @param tokenService the {@link TokenService} token service.
-     * @param userProfileContextFacade the {@link ProfileContextFacade} user profile context facade.
+     * @param profileContextFacade the {@link ProfileContextFacade} user profile context facade.
      */
-    public UserCommandServiceImpl(UserRepository userRepository, RoleRepository roleRepository, HashingService hashingService, TokenService tokenService, ProfileContextFacade userProfileContextFacade) {
+    public UserCommandServiceImpl(UserRepository userRepository, RoleRepository roleRepository, HashingService hashingService, TokenService tokenService, ProfileContextFacade profileContextFacade) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.hashingService = hashingService;
         this.tokenService = tokenService;
-        this.userProfileContextFacade = userProfileContextFacade;
+        this.profileContextFacade = profileContextFacade;
     }
 
     // inherited javadoc
     @Override
     public Optional<User> handle(SignUpCommand command) {
-        if (userRepository.existsByEmail(command.username()))
-            throw new RuntimeException("Email already exists");
-
+        if (userRepository.existsByEmail(command.username())) throw new RuntimeException("Email already exists");
         var roles = command.roles().stream().map(role -> roleRepository.findByName(role.getName())
                 .orElseThrow(() -> new RuntimeException("Role name not found"))).toList();
-
         var user = new User(command.username(), hashingService.encode(command.password()), roles);
         var savedUser = userRepository.save(user);
-        System.out.println("User created with ID: " + savedUser.getId());
-
         try {
             // Create user profile automatically after user creation with null values
-            Long profileId = userProfileContextFacade.createUserProfile(
+            Long profileId = profileContextFacade.createProfile(
                 savedUser.getId(),
-                null,  // firstName will be handled by PersonName value object
-                null,  // lastName will be handled by PersonName value object
-                null   // phoneNumber will be handled by PhoneNumber value object
+                null,
+                null,
+                null
             );
-            System.out.println("Profile created with ID: " + profileId);
         } catch (Exception e) {
-            System.err.println("Error creating profile: " + e.getMessage());
             e.printStackTrace();
         }
-
         return Optional.of(savedUser);
     }
 
-    // inherited javadoc
+
     @Override
     public Optional<ImmutablePair<User, String>> handle(SignInCommand command) {
         var user = userRepository.findByEmail(command.username())
@@ -92,54 +84,24 @@ public class UserCommandServiceImpl implements UserCommandService {
 
     @Override
     public Optional<User> handle(ChangePasswordCommand command) {
-        // Find the user by ID
         var userOptional = userRepository.findById(command.userId());
-        if (userOptional.isEmpty()) {
-            throw new RuntimeException("User not found with ID: " + command.userId());
-        }
-
+        if (userOptional.isEmpty()) { throw new RuntimeException("User not found with ID: " + command.userId());}
         var user = userOptional.get();
-
-        // Verify the current password
-        if (!hashingService.matches(command.currentPassword(), user.getPassword())) {
-            throw new RuntimeException("Current password is incorrect");
-        }
-
-        // Update the password
+        if (!hashingService.matches(command.currentPassword(), user.getPassword())) { throw new RuntimeException("Current password is incorrect"); }
         user.setPassword(hashingService.encode(command.newPassword()));
         var savedUser = userRepository.save(user);
-
-        System.out.println("Password changed successfully for user ID: " + user.getId());
-
         return Optional.of(savedUser);
     }
 
     @Override
     public Optional<User> handle(ChangeEmailCommand command) {
-        // Find the user by ID
         var userOptional = userRepository.findById(command.userId());
-        if (userOptional.isEmpty()) {
-            throw new RuntimeException("User not found with ID: " + command.userId());
-        }
-
+        if (userOptional.isEmpty()) { throw new RuntimeException("User not found with ID: " + command.userId()); }
         var user = userOptional.get();
-
-        // Verify the password
-        if (!hashingService.matches(command.password(), user.getPassword())) {
-            throw new RuntimeException("Password is incorrect");
-        }
-
-        // Check if the new email already exists
-        if (userRepository.existsByEmail(command.newEmail())) {
-            throw new RuntimeException("Email already exists: " + command.newEmail());
-        }
-
-        // Update the email
+        if (!hashingService.matches(command.password(), user.getPassword())) { throw new RuntimeException("Password is incorrect"); }
+        if (userRepository.existsByEmail(command.newEmail())) { throw new RuntimeException("Email already exists: " + command.newEmail()); }
         user.setEmail(command.newEmail());
         var savedUser = userRepository.save(user);
-
-        System.out.println("Email changed successfully for user ID: " + user.getId());
-
         return Optional.of(savedUser);
     }
 }

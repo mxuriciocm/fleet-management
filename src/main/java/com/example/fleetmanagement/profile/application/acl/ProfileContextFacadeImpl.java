@@ -11,34 +11,34 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 /**
- * UserProfile Context Facade Implementation
+ * Profile Context Facade Implementation
  */
 @Service
 public class ProfileContextFacadeImpl implements ProfileContextFacade {
-    private final ProfileCommandService userProfileCommandService;
-    private final ProfileQueryService userProfileQueryService;
+    private final ProfileCommandService profileCommandService;
+    private final ProfileQueryService profileQueryService;
 
-    public ProfileContextFacadeImpl(ProfileCommandService userProfileCommandService, ProfileQueryService userProfileQueryService) {
-        this.userProfileCommandService = userProfileCommandService;
-        this.userProfileQueryService = userProfileQueryService;
+    public ProfileContextFacadeImpl(ProfileCommandService profileCommandService, ProfileQueryService profileQueryService) {
+        this.profileCommandService = profileCommandService;
+        this.profileQueryService = profileQueryService;
     }
 
     @Override
-    public Long createUserProfile(Long userId, String firstName, String lastName, String phoneNumber) {
-        var createUserProfileCommand = new CreateProfileCommand(userId, firstName, lastName, phoneNumber);
-        var userProfile = userProfileCommandService.handle(createUserProfileCommand);
-        return userProfile.isEmpty() ? 0L : userProfile.get().getId();
+    public Long createProfile(Long userId, String firstName, String lastName, String phoneNumber) {
+        var createProfileCommand = new CreateProfileCommand(userId, firstName, lastName, phoneNumber);
+        var profile = profileCommandService.handle(createProfileCommand);
+        return profile.isEmpty() ? 0L : profile.get().getId();
     }
 
     @Override
     public Optional<ProfileDto> fetchProfileByUserId(Long userId) {
         var query = new GetProfileByIdQuery(userId);
-        var userProfile = userProfileQueryService.handle(query);
+        var profile = profileQueryService.handle(query);
 
-        return userProfile.map(profile -> new ProfileDto(
-            profile.getUserId(),
-            profile.getFullName(),
-            profile.getPhoneNumber()
+        return profile.map(p -> new ProfileDto(
+            p.getUserId(),
+            p.getFullName(),
+            p.getPhoneNumber()
         ));
     }
 }
