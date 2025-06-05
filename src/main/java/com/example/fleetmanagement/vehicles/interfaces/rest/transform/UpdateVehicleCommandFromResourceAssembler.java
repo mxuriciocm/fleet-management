@@ -5,6 +5,6 @@ import com.example.fleetmanagement.vehicles.interfaces.rest.resources.UpdateVehi
 
 public class UpdateVehicleCommandFromResourceAssembler {
     public static UpdateVehicleCommand toCommandFromResource(UpdateVehicleResource resource) {
-        return new UpdateVehicleCommand(resource.brand(), resource.model(), resource.status());
+        return new UpdateVehicleCommand(resource.brand(), resource.model());
     }
 }
