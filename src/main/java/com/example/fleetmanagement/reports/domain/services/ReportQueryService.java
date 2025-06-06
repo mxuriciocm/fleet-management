@@ -36,29 +36,4 @@ public interface ReportQueryService {
      * @return a List of Reports of the specified type
      */
     List<Report> handle(GetReportsByTypeQuery query);
-
-    /**
-     * Handle Get Reports by Filter Query
-     * @param query the query containing the filter criteria
-     * @return a List of Reports that match the filter criteria
-     */
-    List<Report> handle(GetReportsByFilterQuery query);
-
-    /**
-     * Find reports by date range
-     * @param startDate date to start the range from
-     * @param endDate date to end the range at
-     * @return a List of Reports within the specified date range
-     */
-    List<Report> findReportsByDateRange(LocalDateTime startDate, LocalDateTime endDate);
-
-    /**
-     * Find reports by type and date range
-     * @param type the type of report to filter by
-     * @param startDate date to start the range from
-     * @param endDate date to end the range at
-     * @return a List of Reports of the specified type within the specified date range
-     */
-    List<Report> findReportsByTypeAndDateRange(String type, LocalDateTime startDate, LocalDateTime endDate);
-
 }
