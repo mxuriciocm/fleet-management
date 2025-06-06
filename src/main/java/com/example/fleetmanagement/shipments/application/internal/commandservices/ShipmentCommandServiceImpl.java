@@ -127,4 +127,13 @@ public class ShipmentCommandServiceImpl implements ShipmentCommandService {
                     return shipmentRepository.save(shipment);
                 });
     }
+
+    @Override
+    public boolean deleteShipment(Long shipmentId) {
+        if (shipmentRepository.existsById(shipmentId)) {
+            shipmentRepository.deleteById(shipmentId);
+            return true;
+        }
+        return false;
+    }
 }

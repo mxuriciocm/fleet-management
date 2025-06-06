@@ -56,4 +56,6 @@ public interface ShipmentCommandService {
     Optional<Shipment> completeShipment(Long shipmentId);
 
     Optional<Shipment> cancelShipment(Long shipmentId);
+
+    boolean deleteShipment(Long shipmentId);
 }
