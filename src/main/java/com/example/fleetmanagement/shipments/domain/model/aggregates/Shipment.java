@@ -31,9 +31,9 @@ public class Shipment extends AuditableAbstractAggregateRoot<Shipment> {
     @Enumerated(EnumType.STRING)
     private ShipmentStatus status;
 
-    private LocalDateTime scheduleDate;
+    private LocalDateTime scheduledDate;
 
-    private LocalDateTime startDate;
+    private LocalDateTime startedDate;
 
     private LocalDateTime completedDate;
 
@@ -47,14 +47,14 @@ public class Shipment extends AuditableAbstractAggregateRoot<Shipment> {
      * Constructor with required fields.
      * @param destination destination of the shipment
      * @param description description of the shipment
-     * @param scheduleDate date when the shipment is scheduled
+     * @param scheduledDate date when the shipment is scheduled
      * @param managerId id of the manager who owns this shipment
      */
-    public Shipment(String destination, String description, LocalDateTime scheduleDate, Long managerId){
+    public Shipment(String destination, String description, LocalDateTime scheduledDate, Long managerId){
         this.destination = destination;
         this.description = description;
         this.status = ShipmentStatus.PENDING;
-        this.scheduleDate = scheduleDate;
+        this.scheduledDate = scheduledDate;
         this.managerId = managerId;
     }
 
@@ -63,7 +63,7 @@ public class Shipment extends AuditableAbstractAggregateRoot<Shipment> {
     public Shipment(CreateShipmentCommand command) {
         this.destination = command.destination();
         this.description = command.description();
-        this.scheduleDate = command.scheduleDate();
+        this.scheduledDate = command.scheduledDate();
         this.managerId = command.managerId();
         this.status = ShipmentStatus.PENDING;
     }
@@ -82,7 +82,7 @@ public class Shipment extends AuditableAbstractAggregateRoot<Shipment> {
         if (this.status == ShipmentStatus.PENDING) { throw new IllegalStateException("Cannot start shipment that is not in PENDING status"); }
         if (this.carrierId == null) { throw new IllegalStateException("Cannot start shipment without an assigned carrier"); }
         this.status = ShipmentStatus.IN_PROGRESS;
-        this.startDate = LocalDateTime.now();
+        this.startedDate = LocalDateTime.now();
         return this;
     }
 
@@ -102,7 +102,7 @@ public class Shipment extends AuditableAbstractAggregateRoot<Shipment> {
     public Shipment changeStatus(ShipmentStatus status) {
         if (this.status == ShipmentStatus.COMPLETED && status != ShipmentStatus.COMPLETED) { throw new IllegalStateException("Cannot change status of a completed shipment"); }
         if (this.status == ShipmentStatus.PENDING && status == ShipmentStatus.PENDING) { throw new IllegalStateException("Cannot revert shipment status to PENDING"); }
-        if (this.status == ShipmentStatus.IN_PROGRESS && this.startDate == null) { this.startDate = LocalDateTime.now(); }
+        if (this.status == ShipmentStatus.IN_PROGRESS && this.startedDate == null) { this.startedDate = LocalDateTime.now(); }
         if (this.status == ShipmentStatus.COMPLETED && this.completedDate == null) { this.completedDate = LocalDateTime.now(); }
         this.status = status;
         return this;
